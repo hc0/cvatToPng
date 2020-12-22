@@ -866,62 +866,62 @@ export class CanvasViewImpl implements CanvasView, Listener {
         );
 
         // Setup event handlers
-        this.content.addEventListener('dblclick', (e: MouseEvent): void => {
-            self.controller.fit();
-            e.preventDefault();
-        });
+        // this.content.addEventListener('dblclick', (e: MouseEvent): void => {
+        //     self.controller.fit();
+        //     e.preventDefault();
+        // });
 
-        this.content.addEventListener('mousedown', (event): void => {
-            if ([0, 1].includes(event.button)) {
-                if (
-                    [Mode.IDLE, Mode.DRAG_CANVAS, Mode.MERGE, Mode.SPLIT].includes(this.mode) ||
-                    event.button === 1 ||
-                    event.altKey
-                ) {
-                    self.controller.enableDrag(event.clientX, event.clientY);
-                }
-            }
-        });
+        // this.content.addEventListener('mousedown', (event): void => {
+        //     if ([0, 1].includes(event.button)) {
+        //         if (
+        //             [Mode.IDLE, Mode.DRAG_CANVAS, Mode.MERGE, Mode.SPLIT].includes(this.mode) ||
+        //             event.button === 1 ||
+        //             event.altKey
+        //         ) {
+        //             self.controller.enableDrag(event.clientX, event.clientY);
+        //         }
+        //     }
+        // });
 
-        window.document.addEventListener('mouseup', (event): void => {
-            if (event.which === 1 || event.which === 2) {
-                self.controller.disableDrag();
-            }
-        });
+        // window.document.addEventListener('mouseup', (event): void => {
+        //     if (event.which === 1 || event.which === 2) {
+        //         self.controller.disableDrag();
+        //     }
+        // });
 
-        this.content.addEventListener('wheel', (event): void => {
-            const { offset } = this.controller.geometry;
-            const point = translateToSVG(this.content, [event.clientX, event.clientY]);
-            self.controller.zoom(point[0] - offset, point[1] - offset, event.deltaY > 0 ? -1 : 1);
-            this.canvas.dispatchEvent(
-                new CustomEvent('canvas.zoom', {
-                    bubbles: false,
-                    cancelable: true,
-                }),
-            );
-            event.preventDefault();
-        });
+        // this.content.addEventListener('wheel', (event): void => {
+        //     const { offset } = this.controller.geometry;
+        //     const point = translateToSVG(this.content, [event.clientX, event.clientY]);
+        //     self.controller.zoom(point[0] - offset, point[1] - offset, event.deltaY > 0 ? -1 : 1);
+        //     this.canvas.dispatchEvent(
+        //         new CustomEvent('canvas.zoom', {
+        //             bubbles: false,
+        //             cancelable: true,
+        //         }),
+        //     );
+        //     event.preventDefault();
+        // });
 
-        this.content.addEventListener('mousemove', (e): void => {
-            self.controller.drag(e.clientX, e.clientY);
+        // this.content.addEventListener('mousemove', (e): void => {
+        //     self.controller.drag(e.clientX, e.clientY);
 
-            if (this.mode !== Mode.IDLE) return;
-            if (e.ctrlKey || e.altKey) return;
+        //     if (this.mode !== Mode.IDLE) return;
+        //     if (e.ctrlKey || e.altKey) return;
 
-            const { offset } = this.controller.geometry;
-            const [x, y] = translateToSVG(this.content, [e.clientX, e.clientY]);
-            const event: CustomEvent = new CustomEvent('canvas.moved', {
-                bubbles: false,
-                cancelable: true,
-                detail: {
-                    x: x - offset,
-                    y: y - offset,
-                    states: this.controller.objects,
-                },
-            });
+        //     const { offset } = this.controller.geometry;
+        //     const [x, y] = translateToSVG(this.content, [e.clientX, e.clientY]);
+        //     const event: CustomEvent = new CustomEvent('canvas.moved', {
+        //         bubbles: false,
+        //         cancelable: true,
+        //         detail: {
+        //             x: x - offset,
+        //             y: y - offset,
+        //             states: this.controller.objects,
+        //         },
+        //     });
 
-            this.canvas.dispatchEvent(event);
-        });
+        //     this.canvas.dispatchEvent(event);
+        // });
 
         this.content.oncontextmenu = (): boolean => false;
         model.subscribe(this);
@@ -1604,9 +1604,9 @@ export class CanvasViewImpl implements CanvasView, Listener {
                     if (Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) >= delta) {
                         const points = pointsToNumberArray(
                             shape.attr('points') ||
-                                `${shape.attr('x')},${shape.attr('y')} ` +
-                                    `${shape.attr('x') + shape.attr('width')},` +
-                                    `${shape.attr('y') + shape.attr('height')}`,
+                            `${shape.attr('x')},${shape.attr('y')} ` +
+                            `${shape.attr('x') + shape.attr('width')},` +
+                            `${shape.attr('y') + shape.attr('height')}`,
                         ).map((x: number): number => x - offset);
 
                         this.drawnStates[state.clientID].points = points;
@@ -1678,9 +1678,9 @@ export class CanvasViewImpl implements CanvasView, Listener {
 
                     const points = pointsToNumberArray(
                         shape.attr('points') ||
-                            `${shape.attr('x')},${shape.attr('y')} ` +
-                                `${shape.attr('x') + shape.attr('width')},` +
-                                `${shape.attr('y') + shape.attr('height')}`,
+                        `${shape.attr('x')},${shape.attr('y')} ` +
+                        `${shape.attr('x') + shape.attr('width')},` +
+                        `${shape.attr('y') + shape.attr('height')}`,
                     ).map((x: number): number => x - offset);
 
                     this.drawnStates[state.clientID].points = points;

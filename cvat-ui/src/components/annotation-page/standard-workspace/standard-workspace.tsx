@@ -16,12 +16,12 @@ import CanvasPointContextMenuComponent from 'components/annotation-page/standard
 export default function StandardWorkspaceComponent(): JSX.Element {
     return (
         <Layout hasSider className='cvat-standard-workspace'>
-            <ControlsSideBarContainer />
+            {/* <ControlsSideBarContainer /> */}
             <CanvasWrapperContainer />
-            <ObjectSideBarComponent />
+            {/* <ObjectSideBarComponent />
             <PropagateConfirmContainer />
             <CanvasContextMenuContainer />
-            <CanvasPointContextMenuComponent />
+            <CanvasPointContextMenuComponent /> */}
         </Layout>
     );
 }

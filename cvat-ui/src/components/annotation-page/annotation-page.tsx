@@ -32,10 +32,9 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
     useEffect(() => {
         saveLogs();
         const root = window.document.getElementById('root');
-        if (root) {
-            root.style.minHeight = '768px';
-        }
-
+        // if (root) {
+        //     root.style.minHeight = '768px';
+        // }
         return () => {
             saveLogs();
             if (root) {
@@ -69,15 +68,15 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
 
     return (
         <Layout className='cvat-annotation-page'>
-            <Layout.Header className='cvat-annotation-header'>
+            {/* <Layout.Header className='cvat-annotation-header'>
                 <AnnotationTopBarContainer />
-            </Layout.Header>
+            </Layout.Header> */}
             {workspace === Workspace.STANDARD && (
                 <Layout.Content style={{ height: '100%' }}>
                     <StandardWorkspaceComponent />
                 </Layout.Content>
             )}
-            {workspace === Workspace.ATTRIBUTE_ANNOTATION && (
+            {/* {workspace === Workspace.ATTRIBUTE_ANNOTATION && (
                 <Layout.Content style={{ height: '100%' }}>
                     <AttributeAnnotationWorkspace />
                 </Layout.Content>
@@ -87,7 +86,7 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
                     <TagAnnotationWorkspace />
                 </Layout.Content>
             )}
-            <StatisticsModalContainer />
+            <StatisticsModalContainer /> */}
         </Layout>
     );
 }

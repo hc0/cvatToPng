@@ -825,7 +825,7 @@ export default class CanvasWrapperComponent extends React.PureComponent<Props> {
                         height: '100%',
                     }}
                 />
-                <div className='cvat-canvas-z-axis-wrapper'>
+                {/* <div className='cvat-canvas-z-axis-wrapper'>
                     <Slider
                         disabled={minZLayer === maxZLayer}
                         min={minZLayer}
@@ -839,7 +839,7 @@ export default class CanvasWrapperComponent extends React.PureComponent<Props> {
                     <Tooltip title={`添加新图层 ${maxZLayer + 1} 并切换到它`} mouseLeaveDelay={0}>
                         <Icon type='plus-circle' onClick={onAddZLayer} />
                     </Tooltip>
-                </div>
+                </div> */}
             </Layout.Content>
         );
     }
