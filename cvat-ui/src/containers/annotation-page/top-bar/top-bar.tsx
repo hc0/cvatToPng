@@ -118,13 +118,52 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
         },
         onSaveAnnotation(sessionInstance: any): void {
             dispatch(saveAnnotationsAsync(sessionInstance));
+            // console.log(document.getElementById('cvat_canvas_background').getBoundingClientRect(),'poosit')
+           
+            
             const $theNodes = document.querySelector(".cvat-canvas-container");
             domtoimage.toPng($theNodes)
                 .then(function (dataUrl) {
                     var img = new Image();
                     img.src = dataUrl;
-                    document.body.appendChild(img);
+                    // console.log(dataUrl,'dataUrl')
+                    // document.body.appendChild(img);
+
+                    // let style = window.getComputedStyle(document.getElementById('cvat_canvas_background'),null)
+                    // let width = parseFloat(style.width)
+                    // let height = parseFloat(style.height)
+                    // let left = parseFloat(style.left)
+                    // let top = parseFloat(style.top)-54
+
+                    let style = document.getElementById('cvat_canvas_background').getBoundingClientRect()
+                    let width = style.width
+                    let height = style.height
+                    let left = style.left
+                    let top = style.top-54
+
+                    img.onload = function(){
+                        var canvas=document.createElement('canvas');
+                        var ctx=canvas.getContext('2d');
+                        canvas.width=width;
+                        canvas.height=height;
+                        ctx.drawImage(img,left,top,width,height,0,0,width,height);
+
+                        var dataImg = new Image()
+                        let src = canvas.toDataURL('image/png')
+                        dataImg.src = src
+                        console.log(src,'src')
+
+                        document.body.appendChild(dataImg)
+                    }
+
+
+                    
+
+                    
+                    
                 });
+
+                
         },
         showStatistics(sessionInstance: any): void {
             dispatch(collectStatisticsAsync(sessionInstance));
