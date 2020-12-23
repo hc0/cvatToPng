@@ -28,7 +28,9 @@ import { Canvas } from 'cvat-canvas-wrapper';
 
 import AnnotationTopBarComponent from 'components/annotation-page/top-bar/top-bar';
 import { CombinedState, FrameSpeed, Workspace } from 'reducers/interfaces';
-
+import html2canvas from 'html2canvas';
+import Canvg, { presets } from 'canvg';
+import domtoimage from 'dom-to-image';
 interface StateToProps {
     jobInstance: any;
     frameNumber: number;
@@ -116,6 +118,13 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
         },
         onSaveAnnotation(sessionInstance: any): void {
             dispatch(saveAnnotationsAsync(sessionInstance));
+            const $theNodes = document.querySelector(".cvat-canvas-container");
+            domtoimage.toPng($theNodes)
+                .then(function (dataUrl) {
+                    var img = new Image();
+                    img.src = dataUrl;
+                    document.body.appendChild(img);
+                });
         },
         showStatistics(sessionInstance: any): void {
             dispatch(collectStatisticsAsync(sessionInstance));

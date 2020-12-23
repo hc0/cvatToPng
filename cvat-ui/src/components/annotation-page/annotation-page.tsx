@@ -68,9 +68,9 @@ export default function AnnotationPageComponent(props: Props): JSX.Element {
 
     return (
         <Layout className='cvat-annotation-page'>
-            {/* <Layout.Header className='cvat-annotation-header'>
+            <Layout.Header className='cvat-annotation-header'>
                 <AnnotationTopBarContainer />
-            </Layout.Header> */}
+            </Layout.Header>
             {workspace === Workspace.STANDARD && (
                 <Layout.Content style={{ height: '100%' }}>
                     <StandardWorkspaceComponent />
