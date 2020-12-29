@@ -23,6 +23,7 @@ import {
     ForwardJumpIcon,
     LastIcon,
 } from 'icons';
+import Button from 'antd/lib/button';
 
 interface Props {
     playing: boolean;
@@ -39,6 +40,7 @@ interface Props {
     onForward(): void;
     onBackward(): void;
     onFirstFrame(): void;
+    onSaveVideo(): void;
     onLastFrame(): void;
     setPrevButton(type: 'regular' | 'filtered' | 'empty'): void;
     setNextButton(type: 'regular' | 'filtered' | 'empty'): void;
@@ -60,6 +62,7 @@ function PlayerButtons(props: Props): JSX.Element {
         onForward,
         onBackward,
         onFirstFrame,
+        onSaveVideo,
         onLastFrame,
         setPrevButton,
         setNextButton,
@@ -100,6 +103,9 @@ function PlayerButtons(props: Props): JSX.Element {
 
     return (
         <Col className='cvat-player-buttons'>
+            <Tooltip title='保存动图' mouseLeaveDelay={0}>
+                <Button type="link" onClick={onSaveVideo}>保存动图</Button>
+            </Tooltip>
             <Tooltip title='第一帧' mouseLeaveDelay={0}>
                 <Icon className='cvat-player-first-button' component={FirstIcon} onClick={onFirstFrame} />
             </Tooltip>
@@ -155,10 +161,10 @@ function PlayerButtons(props: Props): JSX.Element {
                     <Icon className='cvat-player-play-button' component={PlayIcon} onClick={onSwitchPlay} />
                 </Tooltip>
             ) : (
-                <Tooltip title={`停止 ${playPauseShortcut}`} mouseLeaveDelay={0}>
-                    <Icon className='cvat-player-pause-button' component={PauseIcon} onClick={onSwitchPlay} />
-                </Tooltip>
-            )}
+                    <Tooltip title={`停止 ${playPauseShortcut}`} mouseLeaveDelay={0}>
+                        <Icon className='cvat-player-pause-button' component={PauseIcon} onClick={onSwitchPlay} />
+                    </Tooltip>
+                )}
 
             <Popover
                 trigger='contextMenu'

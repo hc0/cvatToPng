@@ -119,8 +119,6 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
         onSaveAnnotation(sessionInstance: any): void {
             dispatch(saveAnnotationsAsync(sessionInstance));
             // console.log(document.getElementById('cvat_canvas_background').getBoundingClientRect(),'poosit')
-           
-            
             const $theNodes = document.querySelector(".cvat-canvas-container");
             domtoimage.toPng($theNodes)
                 .then(function (dataUrl) {
@@ -139,31 +137,31 @@ function mapDispatchToProps(dispatch: any): DispatchToProps {
                     let width = style.width
                     let height = style.height
                     let left = style.left
-                    let top = style.top-54
+                    let top = style.top - 54
 
-                    img.onload = function(){
-                        var canvas=document.createElement('canvas');
-                        var ctx=canvas.getContext('2d');
-                        canvas.width=width;
-                        canvas.height=height;
-                        ctx.drawImage(img,left,top,width,height,0,0,width,height);
+                    img.onload = function () {
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, left, top, width, height, 0, 0, width, height);
 
                         var dataImg = new Image()
                         let src = canvas.toDataURL('image/png')
                         dataImg.src = src
-                        console.log(src,'src')
+                        console.log(src, 'src')
 
                         document.body.appendChild(dataImg)
                     }
 
 
-                    
 
-                    
-                    
+
+
+
                 });
 
-                
+
         },
         showStatistics(sessionInstance: any): void {
             dispatch(collectStatisticsAsync(sessionInstance));
@@ -320,6 +318,43 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
             }
             this.changeFrame(newFrame);
         }
+    };
+    private onSaveVideo = (): void => {
+        const { jobInstance: { stopFrame } } = this.props;
+        let countFrame = stopFrame;
+        const bigImg = [];
+        // this.onFirstFrame();
+        const self = this;
+        const $theNodes = document.querySelector(".cvat-canvas-container");
+        let style = document.getElementById('cvat_canvas_background').getBoundingClientRect()
+        let width = style.width
+        let height = style.height
+        let left = style.left
+        let top = style.top - 54
+        while (countFrame >= 0) {
+            domtoimage.toPng($theNodes)
+                .then(function (dataUrl) {
+                    var img = new Image();
+                    img.src = dataUrl;
+                    console.log(countFrame)
+                    img.onload = function () {
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, left, top, width, height, 0, 0, width, height);
+                        var dataImg = new Image()
+                        let src = canvas.toDataURL('image/png')
+                        dataImg.src = src
+                        // document.body.appendChild(dataImg)
+                        bigImg.push(dataImg);
+                        self.onNextFrame();
+                        countFrame--;
+                    }
+                });
+        }
+
+
     };
 
     private onBackward = (): void => {
@@ -586,6 +621,7 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
                     onForward={this.onForward}
                     onBackward={this.onBackward}
                     onFirstFrame={this.onFirstFrame}
+                    onSaveVideo={this.onSaveVideo}
                     onLastFrame={this.onLastFrame}
                     setNextButtonType={this.onSetNextButtonType}
                     setPrevButtonType={this.onSetPreviousButtonType}

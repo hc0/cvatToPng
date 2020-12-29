@@ -32,7 +32,7 @@ module.exports = {
         historyApiFallback: true,
         proxy: {
 			'/api': {
-				target: 'http://62.234.128.194:30043',
+                target: 'http://62.234.128.194:30043',
 				changOrigin: true,    //是否开启代理
 			}
 		}

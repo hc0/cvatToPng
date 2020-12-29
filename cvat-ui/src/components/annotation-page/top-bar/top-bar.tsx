@@ -46,6 +46,7 @@ interface Props {
     onForward(): void;
     onBackward(): void;
     onFirstFrame(): void;
+    onSaveVideo(): void;
     onLastFrame(): void;
     setPrevButtonType(type: 'regular' | 'filtered' | 'empty'): void;
     setNextButtonType(type: 'regular' | 'filtered' | 'empty'): void;
@@ -89,6 +90,7 @@ export default function AnnotationTopBarComponent(props: Props): JSX.Element {
         onForward,
         onBackward,
         onFirstFrame,
+        onSaveVideo,
         onLastFrame,
         setPrevButtonType,
         setNextButtonType,
@@ -129,6 +131,7 @@ export default function AnnotationTopBarComponent(props: Props): JSX.Element {
                         onForward={onForward}
                         onBackward={onBackward}
                         onFirstFrame={onFirstFrame}
+                        onSaveVideo={onSaveVideo}
                         onLastFrame={onLastFrame}
                         onSwitchPlay={onSwitchPlay}
                         setPrevButton={setPrevButtonType}
