@@ -28,8 +28,6 @@ import { Canvas } from 'cvat-canvas-wrapper';
 
 import AnnotationTopBarComponent from 'components/annotation-page/top-bar/top-bar';
 import { CombinedState, FrameSpeed, Workspace } from 'reducers/interfaces';
-import html2canvas from 'html2canvas';
-import Canvg, { presets } from 'canvg';
 import domtoimage from 'dom-to-image';
 interface StateToProps {
     jobInstance: any;
@@ -319,11 +317,11 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
             this.changeFrame(newFrame);
         }
     };
-    private onSaveVideo = (): void => {
+    private onSaveVideo = async (): Promise<void> => {
         const { jobInstance: { stopFrame } } = this.props;
         let countFrame = stopFrame;
-        const bigImg = [];
-        // this.onFirstFrame();
+        let bigImg: HTMLImageElement[] = [];
+        this.onFirstFrame();
         const self = this;
         const $theNodes = document.querySelector(".cvat-canvas-container");
         let style = document.getElementById('cvat_canvas_background').getBoundingClientRect()
@@ -332,29 +330,28 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
         let left = style.left
         let top = style.top - 54
         while (countFrame >= 0) {
-            domtoimage.toPng($theNodes)
-                .then(function (dataUrl) {
-                    var img = new Image();
-                    img.src = dataUrl;
-                    console.log(countFrame)
-                    img.onload = function () {
-                        var canvas = document.createElement('canvas');
-                        var ctx = canvas.getContext('2d');
-                        canvas.width = width;
-                        canvas.height = height;
-                        ctx.drawImage(img, left, top, width, height, 0, 0, width, height);
-                        var dataImg = new Image()
-                        let src = canvas.toDataURL('image/png')
-                        dataImg.src = src
-                        // document.body.appendChild(dataImg)
-                        bigImg.push(dataImg);
-                        self.onNextFrame();
-                        countFrame--;
-                    }
-                });
+            const dataBase64 = await domtoimage.toPng($theNodes);
+            let img = new Image();
+            img.src = dataBase64;
+            var promise = new Promise((reslove) => {
+                img.onload = async function () {
+                    reslove();
+                };
+            })
+            promise.then(() => {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, left, top, width, height, 0, 0, width, height);
+                var dataImg = new Image();
+                dataImg.src = canvas.toDataURL('image/png')
+                bigImg.push(dataImg);
+                self.onNextFrame();
+                countFrame--;
+            });
         }
-
-
+        console.log(bigImg);
     };
 
     private onBackward = (): void => {
