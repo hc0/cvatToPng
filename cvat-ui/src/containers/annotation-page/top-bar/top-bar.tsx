@@ -317,43 +317,48 @@ class AnnotationTopBarContainer extends React.PureComponent<Props, State> {
             this.changeFrame(newFrame);
         }
     };
-    private onSaveVideo = async (): Promise<void> => {
+    private onSaveVideo = (): void => {
         const { jobInstance: { stopFrame } } = this.props;
         let countFrame = stopFrame;
         let bigImg: HTMLImageElement[] = [];
         this.onFirstFrame();
-        const self = this;
         const $theNodes = document.querySelector(".cvat-canvas-container");
-        let style = document.getElementById('cvat_canvas_background').getBoundingClientRect()
-        let width = style.width
-        let height = style.height
-        let left = style.left
-        let top = style.top - 54
-        while (countFrame >= 0) {
-            const dataBase64 = await domtoimage.toPng($theNodes);
-            let img = new Image();
-            img.src = dataBase64;
-            var promise = new Promise((reslove) => {
-                img.onload = async function () {
-                    reslove();
-                };
-            })
-            promise.then(() => {
-                var canvas = document.createElement('canvas');
-                var ctx = canvas.getContext('2d');
-                canvas.width = width;
-                canvas.height = height;
-                ctx.drawImage(img, left, top, width, height, 0, 0, width, height);
-                var dataImg = new Image();
-                dataImg.src = canvas.toDataURL('image/png')
-                bigImg.push(dataImg);
-                self.onNextFrame();
-                countFrame--;
-            });
-        }
-        console.log(bigImg);
+        let style = document.getElementById('cvat_canvas_background').getBoundingClientRect();
+        let width = style.width;
+        let height = style.height;
+        let left = style.left;
+        let top = style.top - 54;
+        this.SealCanvas($theNodes, bigImg, countFrame, width, height, left, top);
     };
-
+    private SealCanvas = async ($theNodes: any, bigImg: HTMLImageElement[], countFrame: number, width: number, height: number, left: number, top: number): Promise<void> => {
+        const self = this;
+        const dataBase64 = await domtoimage.toPng($theNodes);
+        let img = new Image();
+        img.src = dataBase64;
+        var promise = new Promise((reslove) => {
+            img.onload = async function () {
+                reslove();
+            };
+        })
+        promise.then(() => {
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(img, left, top, width, height, 0, 0, width, height);
+            var dataImg = new Image();
+            dataImg.src = canvas.toDataURL('image/png')
+            self.onNextFrame();
+            bigImg.push(dataImg);
+            if (countFrame > 0) {
+                countFrame--;
+                self.SealCanvas($theNodes, bigImg, countFrame, width, height, left, top);
+            } else {
+                // document.body.appendChild(bigImg[5])
+                console.log(bigImg)
+            }
+        });
+    };
     private onBackward = (): void => {
         const { frameNumber, frameStep, jobInstance, playing, onSwitchPlay } = this.props;
 
